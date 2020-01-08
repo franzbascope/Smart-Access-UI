@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import "./App.css";
+import Login from "./pages/auth/Login";
+import Meetings from "./pages/meetings/containers";
+import NewMeeting from "./pages/meetings/containers/new";
+import Configuration from "./pages/configuration/containers/configuration";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import AppLayout from "./layout/app_layout";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        {!this.props.user ? (
+          <Switch>
+            <Route path="/" exact component={Login} />
+            <Route path="/register" exact component={Register} />
+            <Route path="/forgot_password" exact component={ForgotPassword} />
+            <Route path="*" component={Login} />
+          </Switch>
+        ) : (
+          <AppLayout>
+            <Switch>
+              <Route path="/" exact />
+              <Route path="/configuration" exact component={Configuration} />
+              <Route path="/meetings" exact component={Meetings} />
+              <Route path="/meetings/new" exact component={NewMeeting} />
+            </Switch>
+          </AppLayout>
+        )}
+      </Router>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.UserReducer.user
+});
+
+export default connect(mapStateToProps)(App);

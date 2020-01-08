@@ -1,0 +1,8 @@
+.imgLogo {
+  height: 60px;
+}
+@media screen and (max-width: 576px) {
+  .imgLogo {
+    height: 30px;
+  }
+}
